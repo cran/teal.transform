@@ -23,11 +23,11 @@
 #' @return Named `character` vector.
 #'
 #' @examples
-#' library(shiny)
 #' library(teal.data)
+#' library(shiny)
 #'
-#' ADSL <- teal.transform::rADSL
-#' ADTTE <- teal.transform::rADTTE
+#' ADSL <- rADSL
+#' ADTTE <- rADTTE
 #'
 #' choices1 <- choices_labeled(names(ADSL), col_labels(ADSL, fill = FALSE))
 #' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
@@ -151,8 +151,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'
 #' @examples
 #' library(teal.data)
-#'
-#' ADRS <- teal.transform::rADRS
+#' ADRS <- rADRS
 #' variable_choices(ADRS)
 #' variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 #' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
@@ -254,7 +253,7 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = TRUE, key = 
 #' @param data (`data.frame`, `character`)
 #' If `data.frame`, then data to extract labels from.
 #' If `character`, then name of the dataset to extract data from once available.
-#' @param var_choices (`character` or `NULL`) vector with choices column names.
+#' @param var_choices (`character`, `delayed_variable_choices`) Choice of column names.
 #' @param var_label (`character`) vector with labels column names.
 #' @param subset (`character` or `function`)
 #' If `character`, vector with values to subset.
@@ -267,7 +266,7 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = TRUE, key = 
 #' @return named character vector or `delayed_data` object.
 #'
 #' @examples
-#' ADRS <- teal.transform::rADRS
+#' ADRS <- teal.data::rADRS
 #' value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
 #' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
 #' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
@@ -289,7 +288,10 @@ value_choices <- function(data,
                           var_label = NULL,
                           subset = NULL,
                           sep = " - ") {
-  checkmate::assert_character(var_choices, any.missing = FALSE)
+  checkmate::assert(
+    checkmate::check_character(var_choices, any.missing = FALSE),
+    checkmate::check_class(var_choices, "delayed_variable_choices")
+  )
   checkmate::assert_character(var_label, len = length(var_choices), null.ok = TRUE, any.missing = FALSE)
   checkmate::assert(
     checkmate::check_vector(subset, null.ok = TRUE),
@@ -328,6 +330,7 @@ value_choices.data.frame <- function(data,
   checkmate::assert_subset(var_choices, names(data))
   checkmate::assert_subset(var_label, names(data), empty.ok = TRUE)
 
+  var_choices <- as.vector(var_choices)
   df_choices <- data[var_choices]
   df_label <- data[var_label]
 

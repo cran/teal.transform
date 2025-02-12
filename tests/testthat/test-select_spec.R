@@ -1,5 +1,5 @@
-adsl <- teal.transform::rADSL
-adtte <- teal.transform::rADTTE
+adsl <- teal.data::rADSL
+adtte <- teal.data::rADTTE
 data_list <- list(ADSL = reactive(adsl), ADTTE = reactive(adtte))
 primary_keys_list <- list(ADSL = c("STUDYID", "USUBJID"), ADTTE = c("STUDYID", "USUBJID", "PARAMCD"))
 
@@ -183,14 +183,30 @@ testthat::test_that("delayed version of select_spec", {
   testthat::expect_equal(res_obj, exp_obj)
 })
 
-testthat::test_that("all_choices passed to selected is the same as passing all choices", {
+testthat::test_that("delayed_choices passed to selected selects desired choices", {
   testthat::expect_equal(
     select_spec(choices = letters, selected = letters),
     select_spec(choices = letters, selected = all_choices())
   )
+  testthat::expect_equal(
+    select_spec(choices = letters, selected = letters[1]),
+    select_spec(choices = letters, selected = first_choice())
+  )
+  testthat::expect_equal(
+    select_spec(choices = letters, selected = letters[length(letters)]),
+    select_spec(choices = letters, selected = last_choice())
+  )
+  testthat::expect_equal(
+    select_spec(choices = letters, selected = utils::head(letters, 4)),
+    select_spec(choices = letters, selected = first_choices(4))
+  )
+  testthat::expect_equal(
+    select_spec(choices = letters, selected = utils::tail(letters, 4)),
+    select_spec(choices = letters, selected = last_choices(4))
+  )
 })
 
-testthat::test_that("multiple is set to TRUE if all_choices is passed to selected", {
+testthat::test_that("multiple is set to TRUE if all_choices() is passed to selected", {
   testthat::expect_true(select_spec(choices = variable_choices("test"), selected = all_choices())$multiple)
   testthat::expect_true(select_spec(choices = variable_choices(iris), selected = all_choices())$multiple)
 })

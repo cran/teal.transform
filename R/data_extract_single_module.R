@@ -19,7 +19,7 @@ data_extract_single_ui <- function(id = NULL, single_data_extract_spec) {
   ## filter input
   extract_spec_filter <- single_data_extract_spec$filter
   filter_display <- do.call(
-    div,
+    tags$div,
     lapply(
       seq_along(extract_spec_filter),
       function(idx) {
@@ -57,7 +57,7 @@ data_extract_single_ui <- function(id = NULL, single_data_extract_spec) {
   if (!extract_spec_reshape) reshape_display <- shinyjs::hidden(reshape_display)
 
   ## all combined
-  div(filter_display, select_display, reshape_display)
+  tags$div(filter_display, select_display, reshape_display)
 }
 
 #' The server function for a single `data_extract_spec` object
@@ -76,7 +76,7 @@ data_extract_single_srv <- function(id, datasets, single_data_extract_spec) {
   moduleServer(
     id,
     function(input, output, session) {
-      logger::log_trace("data_extract_single_srv initialized with dataset: { single_data_extract_spec$dataname }.")
+      logger::log_debug("data_extract_single_srv initialized with dataset: { single_data_extract_spec$dataname }.")
 
       # ui could be initialized with a delayed select spec so the choices and selected are NULL
       # here delayed are resolved

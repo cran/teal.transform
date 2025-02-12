@@ -24,7 +24,7 @@ no_select_keyword <- "-- no selection --"
 #' @param choices (`character`) vector of possible choices or `delayed_data` object.
 #'
 #' See [variable_choices()] and [value_choices()].
-#' @param selected (`character`) vector of preselected options, (`all_choices`) object
+#' @param selected (`character`) vector of preselected options, (`delayed_choices`) object
 #' or (`delayed_data`) object.
 #'
 #' If `delayed_data` object then `choices` must also be `delayed_data` object.
@@ -32,7 +32,7 @@ no_select_keyword <- "-- no selection --"
 #' `choices` is a vector, or `NULL` if `choices` is a `delayed_data` object.
 #' @param keep_order (`logical`) In case of `FALSE` the selected variables will
 #' be on top of the drop-down field.
-#' @param fixed (optional `logical`) Whether to block user to select choices.
+#' @param fixed (`logical`) optional, whether to block user to select choices.
 #'
 #' @return `choices_selected` returns list of `choices_selected`, encapsulating the specified
 #' `choices`, `selected`, `keep_order` and `fixed`.
@@ -41,16 +41,7 @@ no_select_keyword <- "-- no selection --"
 #' library(shiny)
 #' library(teal.widgets)
 #'
-#' # all_choices example - semantically the same objects
-#' choices_selected(choices = letters, selected = all_choices())
-#' choices_selected(choices = letters, selected = letters)
-#'
-#' choices_selected(
-#'   choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
-#'   selected = "C"
-#' )
-#'
-#' ADSL <- teal.transform::rADSL
+#' ADSL <- teal.data::rADSL
 #' choices_selected(variable_choices(ADSL), "SEX")
 #'
 #' # How to select nothing
@@ -100,6 +91,19 @@ no_select_keyword <- "-- no selection --"
 #'   selected = variable_choices("ADSL", subset = c("STUDYID"))
 #' )
 #'
+#' # Passing `delayed_choices` object - semantically identical objects:
+#' choices_selected(choices = letters, selected = letters)
+#' choices_selected(choices = letters, selected = all_choices())
+#'
+#' choices_selected(
+#'   choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+#'   selected = "E"
+#' )
+#' choices_selected(
+#'   choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+#'   selected = last_choice()
+#' )
+#'
 #' # functional form (subsetting for factor variables only) of choices_selected
 #' # with delayed data loading
 #' choices_selected(variable_choices("ADSL", subset = function(data) {
@@ -136,12 +140,12 @@ choices_selected <- function(choices,
   )
   checkmate::assert(
     checkmate::check_atomic(selected),
-    checkmate::check_multi_class(selected, c("delayed_data", "all_choices"))
+    checkmate::check_multi_class(selected, c("delayed_data", "delayed_choices"))
   )
   checkmate::assert_flag(keep_order)
   checkmate::assert_flag(fixed)
 
-  if (inherits(selected, "all_choices")) selected <- choices
+  if (inherits(selected, "delayed_choices")) selected <- selected(choices)
 
   if (inherits(selected, "delayed_data") && !inherits(choices, "delayed_data")) {
     stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")

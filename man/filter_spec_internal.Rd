@@ -90,13 +90,13 @@ The \code{sep} input has to be \code{" - "} in this case.
 
 \code{delayed_data} objects can be created via \code{\link[=variable_choices]{variable_choices()}} or \code{\link[=value_choices]{value_choices()}}.}
 
-\item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data} or \code{all_choices}) object.
+\item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data} or \code{delayed_choices}) object.
 Named character vector to define the selected values of a shiny \code{\link[shiny:selectInput]{shiny::selectInput()}}
 (default values).
 This value will be displayed inside the shiny app upon start.
-The \code{all_choices} object indicates selecting all possible choices.}
+\code{delayed_choices} objects resolve selection when choices become available.}
 
-\item{label}{(optional \code{character}). Define a label on top of this specific
+\item{label}{(\code{character}) optional, defines a label on top of this specific
 shiny \code{\link[shiny:selectInput]{shiny::selectInput()}}. The default value is \code{"Filter by"}.}
 
 \item{fixed}{(\code{logical})
@@ -108,7 +108,7 @@ shiny \code{\link[shiny:selectInput]{shiny::selectInput()}}.}
 \item{sep}{(\code{character}) A separator string to split the \code{choices} or
 \code{selected} inputs into the values of the different columns.}
 
-\item{drop_keys}{(optional \code{logical}) whether to drop filter column from the
+\item{drop_keys}{(\code{logical}) optional, whether to drop filter column from the
 dataset keys, \code{TRUE} on default.}
 
 \item{dataname}{(\code{character})

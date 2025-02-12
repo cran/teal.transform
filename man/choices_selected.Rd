@@ -19,7 +19,7 @@ is.choices_selected(x)
 
 See \code{\link[=variable_choices]{variable_choices()}} and \code{\link[=value_choices]{value_choices()}}.}
 
-\item{selected}{(\code{character}) vector of preselected options, (\code{all_choices}) object
+\item{selected}{(\code{character}) vector of preselected options, (\code{delayed_choices}) object
 or (\code{delayed_data}) object.
 
 If \code{delayed_data} object then \code{choices} must also be \code{delayed_data} object.
@@ -29,7 +29,7 @@ If not supplied it will default to the first element of \code{choices} if
 \item{keep_order}{(\code{logical}) In case of \code{FALSE} the selected variables will
 be on top of the drop-down field.}
 
-\item{fixed}{(optional \code{logical}) Whether to block user to select choices.}
+\item{fixed}{(\code{logical}) optional, whether to block user to select choices.}
 
 \item{x}{(\code{choices_selected}) object to check.}
 }
@@ -66,16 +66,7 @@ In case you want to keep your specific order of choices, set \code{keep_order} t
 library(shiny)
 library(teal.widgets)
 
-# all_choices example - semantically the same objects
-choices_selected(choices = letters, selected = all_choices())
-choices_selected(choices = letters, selected = letters)
-
-choices_selected(
-  choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
-  selected = "C"
-)
-
-ADSL <- teal.transform::rADSL
+ADSL <- teal.data::rADSL
 choices_selected(variable_choices(ADSL), "SEX")
 
 # How to select nothing
@@ -123,6 +114,19 @@ choices_selected(
 choices_selected(
   choices = variable_choices("ADSL"),
   selected = variable_choices("ADSL", subset = c("STUDYID"))
+)
+
+# Passing `delayed_choices` object - semantically identical objects:
+choices_selected(choices = letters, selected = letters)
+choices_selected(choices = letters, selected = all_choices())
+
+choices_selected(
+  choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+  selected = "E"
+)
+choices_selected(
+  choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
+  selected = last_choice()
 )
 
 # functional form (subsetting for factor variables only) of choices_selected

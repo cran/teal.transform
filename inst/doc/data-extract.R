@@ -4,14 +4,14 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## -----------------------------------------------------------------------------
+## ----library------------------------------------------------------------------
 library(teal.transform)
 library(teal.data)
 library(shiny)
 
 # Define data.frame objects
-ADSL <- teal.transform::rADSL
-ADTTE <- teal.transform::rADTTE
+ADSL <- teal.data::rADSL
+ADTTE <- teal.data::rADTTE
 
 # create a list of reactive data.frame objects
 datasets <- list(
@@ -25,14 +25,14 @@ join_keys <- join_keys(
   join_key("ADTTE", "ADTTE", c("STUDYID", "USUBJID", "PARAMCD"))
 )
 
-## -----------------------------------------------------------------------------
+## ----data_extract_spec--------------------------------------------------------
 simple_des <- data_extract_spec(
   dataname = "ADSL",
   filter = filter_spec(vars = "SEX", choices = c("F", "M")),
   select = select_spec(choices = c("BMRKR1", "AGE"))
 )
 
-## -----------------------------------------------------------------------------
+## ----extract_ui_srv-----------------------------------------------------------
 extract_ui <- function(id, data_extract) {
   ns <- NS(id)
   sidebarLayout(
@@ -59,11 +59,25 @@ extract_srv <- function(id, datasets, data_extract, join_keys) {
   })
 }
 
-## ----eval=FALSE---------------------------------------------------------------
-#  shinyApp(
-#    ui = fluidPage(extract_ui("data_extract", simple_des)),
-#    server = function(input, output, session) {
-#      extract_srv("data_extract", datasets, simple_des, join_keys)
-#    }
-#  )
+## ----shinyapp, eval=FALSE-----------------------------------------------------
+# shinyApp(
+#   ui = fluidPage(extract_ui("data_extract", simple_des)),
+#   server = function(input, output, session) {
+#     extract_srv("data_extract", datasets, simple_des, join_keys)
+#   }
+# )
+
+## ----shinylive_url, echo = FALSE, results = 'asis', eval = requireNamespace("roxy.shinylive", quietly = TRUE)----
+code <- paste0(c(
+  knitr::knit_code$get("library"),
+  knitr::knit_code$get("data_extract_spec"),
+  knitr::knit_code$get("extract_ui_srv"),
+  knitr::knit_code$get("shinyapp")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+cat(sprintf("[Open in Shinylive](%s)\n\n", url))
+
+## ----shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")----
+# knitr::include_url(url, height = "800px")
 

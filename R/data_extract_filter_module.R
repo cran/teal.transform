@@ -34,7 +34,7 @@ data_extract_filter_ui <- function(filter, id = "filter") {
     fixed = filter$fixed
   )
 
-  div(
+  tags$div(
     class = "filter_spec",
     if (filter$vars_fixed) shinyjs::hidden(html_col) else html_col,
     html_vals
@@ -64,11 +64,15 @@ data_extract_filter_srv <- function(id, datasets, filter) {
       # We force the evaluation of filter, otherwise the observers are set up with the last element
       # of the list in data_extract_single_srv and not all of them (due to R lazy evaluation)
       force(filter)
-      logger::log_trace("data_extract_filter_srv initialized with: { filter$dataname } dataset.")
+      logger::log_debug("data_extract_filter_srv initialized with: { filter$dataname } dataset.")
 
       isolate({
         # when the filter is initialized with a delayed spec, the choices and selected are NULL
         # here delayed are resolved and the values are set up
+        # Begin by resolving delayed choices.
+        if (inherits(filter$selected, "delayed_choices"))  {
+          filter$selected <- filter$selected(filter$choices)
+        }
         teal.widgets::updateOptionalSelectInput(
           session = session,
           inputId = "col",
@@ -102,13 +106,14 @@ data_extract_filter_srv <- function(id, datasets, filter) {
             } else {
               choices[1]
             }
+
           } else {
             choices <- character(0)
             selected <- character(0)
           }
           dn <- filter$dataname
           fc <- paste(input$col, collapse = ", ")
-          logger::log_trace("data_extract_filter_srv@1 filter dataset: { dn }; filter var: { fc }.")
+          logger::log_debug("data_extract_filter_srv@1 filter dataset: { dn }; filter var: { fc }.")
           # In order to force reactivity we run two updates: (i) set up dummy values (ii) set up appropriate values
           # It's due to a missing reactivity triggers if new selected value is identical with previously selected one.
           teal.widgets::updateOptionalSelectInput(
@@ -148,8 +153,8 @@ get_initial_filter_values <- function(filter, datasets) {
       datasets[[filter$dataname]](),
       as.character(filter$vars_selected)
     )
-    initial_values$selected <- if (inherits(filter$selected, "all_choices")) {
-      initial_values$choices
+    initial_values$selected <- if (inherits(filter$selected, "delayed_choices")) {
+      filter$selected(initial_values$choices)
     } else {
       filter$selected
     }

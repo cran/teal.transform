@@ -1,5 +1,5 @@
-ADSL <- teal.transform::rADSL
-ADTTE <- teal.transform::rADTTE
+ADSL <- teal.data::rADSL
+ADTTE <- teal.data::rADTTE
 data_list <- list(ADSL = reactive(ADSL), ADTTE = reactive(ADTTE), ADLB = reactive(ADLB))
 join_keys <- teal.data::default_cdisc_join_keys[c("ADSL", "ADTTE", "ADLB")]
 primary_keys_list <- lapply(join_keys, function(x) x[[1]])
@@ -218,7 +218,7 @@ testthat::test_that("filter_spec_internal", {
 })
 
 testthat::test_that("filter_spec_internal contains dataname", {
-  ADSL <- teal.transform::rADSL
+  ADSL <- teal.data::rADSL
 
   x_filter <- filter_spec_internal(
     vars_choices = variable_choices(ADSL)
@@ -354,7 +354,7 @@ testthat::test_that("delayed version of filter_spec", {
     )
   )
 
-  res_obj <- isolate(resolve(obj, datasets = data_list, key = primary_keys_list))
+  res_obj <- isolate(resolve(obj, datasets = data_list, keys = primary_keys_list))
   exp_obj <- filter_spec(
     vars = variable_choices(ADSL, subset = "ARMCD"),
     choices = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
@@ -426,7 +426,7 @@ testthat::test_that("delayed version of filter_spec", {
     )
   )
 
-  res_obj <- isolate(resolve(obj, datasets = data_list, key = primary_keys_list))
+  res_obj <- isolate(resolve(obj, datasets = data_list, keys = primary_keys_list))
 
   # comparison not implemented, must be done individually
   testthat::expect_equal(res_obj$choices, exp_obj$choices)
@@ -437,13 +437,28 @@ testthat::test_that("delayed version of filter_spec", {
   )
 })
 
-testthat::test_that("all_choices passed to selected identical to all choices", {
+testthat::test_that("delayed_choices passed to selected select desired choices", {
   testthat::expect_equal(
-    filter_spec(vars = "test", choices = c(1, 2), selected = c(1, 2)),
-    filter_spec(vars = "test", choices = c(1, 2), selected = all_choices())
+    filter_spec(vars = "test", choices = letters, selected = letters),
+    filter_spec(vars = "test", choices = letters, selected = all_choices())
+  )
+  testthat::expect_equal(
+    filter_spec(vars = "test", choices = letters, selected = letters[1L]),
+    filter_spec(vars = "test", choices = letters, selected = first_choice())
+  )
+  testthat::expect_equal(
+    filter_spec(vars = "test", choices = letters, selected = letters[length(letters)]),
+    filter_spec(vars = "test", choices = letters, selected = last_choice())
+  )
+  testthat::expect_equal(
+    filter_spec(vars = "test", choices = letters, selected = utils::head(letters, 4)),
+    filter_spec(vars = "test", choices = letters, selected = first_choices(4))
+  )
+  testthat::expect_equal(
+    filter_spec(vars = "test", choices = letters, selected = utils::tail(letters, 4)),
+    filter_spec(vars = "test", choices = letters, selected = last_choices(4))
   )
 })
-
 
 # With resolve_delayed
 testthat::test_that("delayed filter_spec - resolve_delayed", {
