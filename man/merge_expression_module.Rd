@@ -59,8 +59,6 @@ UI function.}
 Reactive expression with output from \code{\link[=merge_expression_srv]{merge_expression_srv()}}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 Convenient wrapper to combine \code{data_extract_multiple_srv()} and
 \code{merge_expression_srv()} when no additional processing is required.
 Compare the example below with that found in \code{\link[=merge_expression_srv]{merge_expression_srv()}}.
@@ -119,13 +117,13 @@ adlb_extract <- data_extract_spec(
   )
 )
 
-ui <- fluidPage(
-  standard_layout(
-    output = tags$div(
+ui <- bslib::page_fluid(
+  bslib::layout_sidebar(
+    tags$div(
       verbatimTextOutput("expr"),
       dataTableOutput("data")
     ),
-    encoding = tagList(
+    sidebar = tagList(
       data_extract_ui("adsl_var", label = "ADSL selection", adsl_extract),
       data_extract_ui("adlb_var", label = "ADLB selection", adlb_extract)
     )

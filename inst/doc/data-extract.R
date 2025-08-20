@@ -61,7 +61,7 @@ extract_srv <- function(id, datasets, data_extract, join_keys) {
 
 ## ----shinyapp, eval=FALSE-----------------------------------------------------
 # shinyApp(
-#   ui = fluidPage(extract_ui("data_extract", simple_des)),
+#   ui = bslib::page_fluid(extract_ui("data_extract", simple_des)),
 #   server = function(input, output, session) {
 #     extract_srv("data_extract", datasets, simple_des, join_keys)
 #   }

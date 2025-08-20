@@ -64,9 +64,6 @@ Name of the analysis dataset.}
 Reactive expression with output from \code{\link[=merge_expression_srv]{merge_expression_srv()}}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\details{
 When additional processing of the \code{data_extract} list input is required,
 \code{merge_expression_srv()} can be combined with \code{data_extract_multiple_srv()}
 or \code{data_extract_srv()} to influence the \code{selector_list} input.
@@ -127,13 +124,13 @@ adlb_extract <- data_extract_spec(
   )
 )
 
-ui <- fluidPage(
-  standard_layout(
-    output = tags$div(
+ui <- bslib::page_fluid(
+  bslib::layout_sidebar(
+    tags$div(
       verbatimTextOutput("expr"),
       dataTableOutput("data")
     ),
-    encoding = tagList(
+    sidebar = tagList(
       data_extract_ui("adsl_var", label = "ADSL selection", adsl_extract),
       data_extract_ui("adlb_var", label = "ADLB selection", adlb_extract)
     )

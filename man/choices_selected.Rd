@@ -40,8 +40,6 @@ be on top of the drop-down field.}
 \code{is.choices_selected} returns \code{TRUE} if \code{x} inherits from a \code{choices_selected} object, \code{FALSE} otherwise.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 Construct a single list containing available choices, the default selected value, and
 additional settings such as to order the choices with the selected elements appearing first
 or whether to block the user from making selections.
@@ -141,7 +139,7 @@ cs <- choices_selected(
   selected = "A"
 )
 
-ui <- fluidPage(
+ui <- bslib::page_fluid(
   optionalSelectInput(
     inputId = "id",
     choices = cs$choices,

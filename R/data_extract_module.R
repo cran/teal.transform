@@ -47,10 +47,21 @@ cond_data_extract_single_ui <- function(ns, single_data_extract_spec) {
   )
 }
 
+#' @keywords internal
+#' @noRd
+data_extract_deps <- function() {
+  htmltools::htmlDependency(
+    name = "teal-widgets-data-extract",
+    version = utils::packageVersion("teal.transform"),
+    package = "teal.transform",
+    src = "css",
+    stylesheet = "data-extract.css"
+  )
+}
+
 #' `teal` data extraction module user-interface
 #'
-#' @description
-#' `r lifecycle::badge("experimental")`
+#' @description Data extraction module.
 #'
 #' @details
 #' There are three inputs that will be rendered
@@ -109,9 +120,9 @@ cond_data_extract_single_ui <- function(ns, single_data_extract_spec) {
 #'   )
 #' )
 #' # Call to use inside your teal module UI function
-#' standard_layout(
-#'   output = tableOutput("table"),
-#'   encoding = tags$div(
+#' bslib::layout_sidebar(
+#'   tableOutput("table"),
+#'   sidebar = tags$div(
 #'     data_extract_ui(
 #'       id = "regressor",
 #'       label = "Regressor Variable",
@@ -169,8 +180,8 @@ data_extract_ui <- function(id, label, data_extract_spec, is_single_dataset = FA
       )
     }
   }
-  tagList(
-    include_css_files(pattern = "data_extract"),
+  tags$div(
+    data_extract_deps(),
     tags$div(
       class = "data-extract",
       tags$label(label),
@@ -261,7 +272,6 @@ check_data_extract_spec_react <- function(datasets, data_extract) {
 #' Extraction of the selector(s) details
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #'
 #' Extracting details of the selection(s) in [data_extract_ui] elements.
 #'
@@ -322,9 +332,9 @@ check_data_extract_spec_react <- function(datasets, data_extract) {
 #' join_keys <- join_keys(join_key("ADSL", "ADSL", c("STUDYID", "USUBJID")))
 #'
 #' # App: data extraction with validation
-#' ui <- fluidPage(
-#'   standard_layout(
-#'     output = verbatimTextOutput("out1"),
+#' ui <- bslib::page_fluid(
+#'   bslib::layout_sidebar(
+#'     verbatimTextOutput("out1"),
 #'     encoding = tagList(
 #'       data_extract_ui(
 #'         id = "adsl_var",
@@ -364,10 +374,10 @@ check_data_extract_spec_react <- function(datasets, data_extract) {
 #' }
 #'
 #' # App: simplified data extraction
-#' ui <- fluidPage(
-#'   standard_layout(
-#'     output = verbatimTextOutput("out1"),
-#'     encoding = tagList(
+#' ui <- bslib::page_fluid(
+#'   bslib::layout_sidebar(
+#'     verbatimTextOutput("out1"),
+#'     sidebar = tagList(
 #'       data_extract_ui(
 #'         id = "adsl_var",
 #'         label = "ADSL selection",
@@ -570,7 +580,6 @@ data_extract_srv.list <- function(id,
 #' Creates a named list of `data_extract_srv` output
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
 #'
 #' `data_extract_multiple_srv` loops over the list of `data_extract` given and
 #' runs `data_extract_srv` for each one returning a list of reactive objects.
@@ -613,11 +622,11 @@ data_extract_srv.list <- function(id,
 #'
 #' data_list <- list(iris = reactive(iris))
 #'
-#' ui <- fluidPage(
+#' ui <- bslib::page_fluid(
 #'   useShinyjs(),
-#'   standard_layout(
-#'     output = verbatimTextOutput("out1"),
-#'     encoding = tagList(
+#'   bslib::layout_sidebar(
+#'     verbatimTextOutput("out1"),
+#'     sidebar = tagList(
 #'       data_extract_ui(
 #'         id = "x_var",
 #'         label = "Please select an X column",

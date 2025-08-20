@@ -104,7 +104,7 @@ merge_srv <- function(id, datasets, data_extracts, join_keys) {
 
 ## ----shinyapp, eval=FALSE-----------------------------------------------------
 # shinyApp(
-#   ui = fluidPage(merge_ui("data_merge", data_extracts)),
+#   ui = bslib::page_fluid(merge_ui("data_merge", data_extracts)),
 #   server = function(input, output, session) {
 #     merge_srv("data_merge", datasets, data_extracts, join_keys)
 #   }

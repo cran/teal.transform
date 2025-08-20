@@ -74,8 +74,6 @@ A reactive \code{list} containing following fields:
 }
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 Extracting details of the selection(s) in \link{data_extract_ui} elements.
 }
 \examples{
@@ -112,9 +110,9 @@ data_list <- list(ADSL = reactive(ADSL))
 join_keys <- join_keys(join_key("ADSL", "ADSL", c("STUDYID", "USUBJID")))
 
 # App: data extraction with validation
-ui <- fluidPage(
-  standard_layout(
-    output = verbatimTextOutput("out1"),
+ui <- bslib::page_fluid(
+  bslib::layout_sidebar(
+    verbatimTextOutput("out1"),
     encoding = tagList(
       data_extract_ui(
         id = "adsl_var",
@@ -154,10 +152,10 @@ if (interactive()) {
 }
 
 # App: simplified data extraction
-ui <- fluidPage(
-  standard_layout(
-    output = verbatimTextOutput("out1"),
-    encoding = tagList(
+ui <- bslib::page_fluid(
+  bslib::layout_sidebar(
+    verbatimTextOutput("out1"),
+    sidebar = tagList(
       data_extract_ui(
         id = "adsl_var",
         label = "ADSL selection",
