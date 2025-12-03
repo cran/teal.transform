@@ -1,8 +1,8 @@
 Package: teal.transform
 Title: Functions for Extracting and Merging Data in the 'teal'
         Framework
-Version: 0.7.0
-Date: 2025-08-12
+Version: 0.7.1
+Date: 2025-12-01
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
@@ -39,9 +39,9 @@ Config/Needs/verdepcheck: mllg/checkmate, tidyverse/dplyr,
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2025-08-19 19:50:22 UTC; unardid
+Packaged: 2025-12-02 17:55:48 UTC; unardid
 Author: Dawid Kaledkowski [aut, cre],
   Pawel Rucki [aut],
   Mahmoud Hallal [aut],
@@ -52,4 +52,4 @@ Author: Dawid Kaledkowski [aut, cre],
   F. Hoffmann-La Roche AG [cph, fnd]
 Maintainer: Dawid Kaledkowski <dawid.kaledkowski@roche.com>
 Repository: CRAN
-Date/Publication: 2025-08-20 05:00:07 UTC
+Date/Publication: 2025-12-03 07:50:02 UTC
